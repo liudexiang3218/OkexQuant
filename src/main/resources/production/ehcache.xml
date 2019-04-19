@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache>
+    <!-- 指定一个文件目录，当EhCache把数据写到硬盘上时，将把数据写到这个文件目录下 -->
+    <diskStore path="/srv/cache"/>
+    <!-- 设定缓存的默认数据过期策略 -->
+    <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            maxElementsOnDisk="10000000"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU">
+        <persistence strategy="localTempSwap"/>
+    </defaultCache>
+
+    <cache name="instrumentCache"
+        maxElementsInMemory="1000"
+        eternal="false"
+        overflowToDisk="false"
+        timeToIdleSeconds="4"
+        timeToLiveSeconds="4"
+        diskPersistent="false"
+        />
+     <cache name="hedgingConfigCache"
+    maxElementsInMemory="1000"
+        eternal="true"
+        overflowToDisk="true"
+        diskPersistent="true"
+        />
+        <cache name="hedgingsCache"
+    maxElementsInMemory="1000"
+        eternal="true"
+        overflowToDisk="true"
+        diskPersistent="true"
+        />
+</ehcache>

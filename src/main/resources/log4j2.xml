@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+	<properties>
+		<property name="LOG_HOME">/srv/depthlog</property>
+		<property name="FILE_NAME">depth</property>
+	</properties>
+	<appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+		<RollingRandomAccessFile immediateFlush="false"
+			bufferedIO="true" name="RollingFile"
+			fileName="${LOG_HOME}/${FILE_NAME}.log"
+			filePattern="${LOG_HOME}/$${date:yyyy-MM}/${FILE_NAME}-%d{MM-dd-yyyy}-%i.log.gz">
+			<PatternLayout pattern="%msg%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="100 MB" />
+			</Policies>
+		</RollingRandomAccessFile>
+	</appenders>
+	<loggers>
+		<Root level="ERROR">
+			<AppenderRef ref="Console"/>
+		</Root>
+		<Logger name="depth" level="INFO" additivity="false">
+			<appender-ref ref="RollingFile" />
+		</Logger>
+	</loggers>
+</configuration>

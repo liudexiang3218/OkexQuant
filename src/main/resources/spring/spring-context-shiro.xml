@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context.xsd"
+	default-lazy-init="true">
+	<description>Shiro Configuration</description>
+	<bean id="userRealm" class="com.xiang.shiro.UserRealm">
+		<property name="credentialsMatcher">
+			<bean
+				class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+				<property name="hashAlgorithmName" value="MD5"></property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="jwtRealm" class="com.xiang.shiro.JwtRealm">
+		<property name="credentialsMatcher">
+			<bean class="com.xiang.shiro.JWTCredentialsMatcher" />
+		</property>
+	</bean>
+	<bean id="securityManager"
+		class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="authenticator" ref="authenticator" />
+		<property
+			name="subjectDAO.sessionStorageEvaluator.sessionStorageEnabled"
+			value="false" />
+		<property name="sessionManager">
+			<bean class="org.apache.shiro.session.mgt.DefaultSessionManager">
+				<property name="sessionValidationSchedulerEnabled"
+					value="false" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="authenticator"
+		class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+		<property name="authenticationStrategy">
+			<bean class="org.apache.shiro.authc.pam.FirstSuccessfulStrategy" />
+		</property>
+		<property name="realms">
+			<list>
+				<ref bean="jwtRealm" />
+				<ref bean="userRealm" />
+			</list>
+		</property>
+	</bean>
+	<bean id="shiroFilter"
+		class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<property name="filterChainDefinitions">
+			<value>
+				/static/** = anon
+				/resources/** = anon
+				/user/login = anon
+				/hedging/** = roles["admin"]
+				/** = authc
+			</value>
+		</property>
+		<property name="filters">
+			<map>
+				<entry key="authc" value-ref="userFormAuthenticationFilter" />
+				<entry key="roles" value-ref="jwtAuthFilter" />
+			</map>
+		</property>
+	</bean>
+	<bean id="userFormAuthenticationFilter"
+		class="com.xiang.shiro.UserFormAuthenticationFilter" />
+	<bean id="jwtAuthFilter" class="com.xiang.shiro.JwtAuthFilter" />
+</beans>

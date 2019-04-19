@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:amq="http://activemq.apache.org/schema/core"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+						http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/aop 
+						http://www.springframework.org/schema/aop/spring-aop.xsd
+						http://www.springframework.org/schema/context 
+						http://www.springframework.org/schema/context/spring-context.xsd
+						http://www.springframework.org/schema/tx 
+						http://www.springframework.org/schema/tx/spring-tx.xsd
+                        http://www.springframework.org/schema/mvc    
+                        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                        http://activemq.apache.org/schema/core 
+                        http://activemq.apache.org/schema/core/activemq-core-5.15.4.xsd
+                        http://www.springframework.org/schema/cache
+                        http://www.springframework.org/schema/cache/spring-cache.xsd
+	">
+	<aop:aspectj-autoproxy proxy-target-class="true"
+		expose-proxy="true" />
+	<context:annotation-config />
+	<context:component-scan
+		base-package="com.xiang.service,com.xiang.spring,com.xiang.user.service" />
+	<!-- ok api -->
+	<bean id="systemConfig"
+		class="com.xiang.service.impl.SystemConfig">
+		<property name="endpoint" value="${ok_rest_url}" />
+		<property name="apiKey" value="${ok_api_key}" />
+		<property name="secretKey" value="${ok_secret_key}" />
+		<property name="passphrase" value="${ok_passphrase}" />
+		<property name="okWebSocketURL" value="${ok_websocket_url}" />
+		<property name="connectTimeout" value="5000" />
+		<property name="coins" value="${ok_coins}" />
+	</bean>
+	<bean id="msgCenterService"
+		class="com.xiang.service.impl.MsgCenterServiceImpl"></bean>
+	<bean id="webSoketClient"
+		class="com.okex.websocket.WebSoketClient">
+		<property name="service" ref="msgCenterService" />
+		<property name="config" ref="systemConfig" />
+	</bean>
+	<amq:connectionFactory id="amqConnectionFactory"
+		brokerURL="${broker_url}" userName="admin" password="admin" />
+	<bean id="connectionFactory"
+		class="org.springframework.jms.connection.CachingConnectionFactory">
+
+		<property name="targetConnectionFactory"
+			ref="amqConnectionFactory" />
+
+		<property name="sessionCacheSize" value="100" />
+	</bean>
+	<bean id="destinations"
+		class="org.apache.activemq.command.ActiveMQTopic">
+	</bean>
+	<bean id="jmsTemplate"
+		class="org.springframework.jms.core.JmsTemplate">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="defaultDestination" ref="destinations" />
+		<property name="pubSubDomain" value="true" />
+		<property name="deliveryMode" value="1" />
+	</bean>
+	<!-- 开发生产环境配置 -->
+	<beans profile="test">
+		<context:property-placeholder
+			location="classpath:test/system.properties" />
+	</beans>
+	<beans profile="development">
+		<context:property-placeholder
+			location="classpath:development/system.properties" />
+	</beans>
+	<beans profile="production">
+		<context:property-placeholder
+			location="classpath:production/system.properties" />
+	</beans>
+</beans>
