@@ -21,28 +21,23 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Strings;
-import com.okcoin.commons.okex.open.api.bean.spot.result.Product;
 import com.okex.websocket.FutureInstrument;
 import com.xiang.service.FutureInstrumentService;
 import com.xiang.service.HedgingDataService;
 import com.xiang.service.InstrumentsDepthService;
-import com.xiang.service.SpotInstrumentService;
 
 /**
+ * 数据采集服务，3秒采集一次价差数据，推送到MQ
  * @author xiang
  * @createDate 2018年12月11日 下午2:49:31
  */
 @Service("hedgingDataService")
 @EnableScheduling
 public class HedgingDataServiceImpl extends BaseDataServiceImpl implements HedgingDataService {
-	@Autowired
-	private AccountConfig accountConfig;
 	@Resource(name = "instrumentsDepthService")
 	InstrumentsDepthService instrumentsDepthService;
 	@Autowired
 	private FutureInstrumentService futureInstrumentService;
-	@Autowired
-	private SpotInstrumentService spotInstrumentService;
 	@Autowired
 	private SystemConfig systemConfig;
 	@Resource
@@ -59,7 +54,6 @@ public class HedgingDataServiceImpl extends BaseDataServiceImpl implements Hedgi
 		}
 		for (String coin : coins) {
 			HedgingContext hc = getHedgingContext(coin);
-			Product instrument = spotInstrumentService.getSpotInstrument(coin, "USDT");
 			FutureInstrument thisInstrument = futureInstrumentService.getFutureInstrument(coin, "this_week");
 			FutureInstrument nextInstrument = futureInstrumentService.getFutureInstrument(coin, "next_week");
 			FutureInstrument quarterInstrument = futureInstrumentService.getFutureInstrument(coin, "quarter");
@@ -68,10 +62,6 @@ public class HedgingDataServiceImpl extends BaseDataServiceImpl implements Hedgi
 				futureInstrumentService.refresh();
 			}
 			// 生成处理图表图表数据
-			// 现货与当周
-			if (instrument != null && thisInstrument != null) {
-				processData(hc, "tt", instrument.getInstrument_id(), thisInstrument.getInstrument_id());
-			}
 			// 当周与次周
 			if (thisInstrument != null && nextInstrument != null) {
 				processData(hc, "tn", thisInstrument.getInstrument_id(), nextInstrument.getInstrument_id());
@@ -87,30 +77,8 @@ public class HedgingDataServiceImpl extends BaseDataServiceImpl implements Hedgi
 		}
 	}
 
-	/**
-	 * @param profitRate %后的结果，由于页面设置使用的是%后的数值，所以这里必须转换成正常的数值
-	 * @return 正常数值，非%后的结果
-	 */
-	private double getPs(float profitRate) {
-		profitRate = profitRate / 100f;
-		return (1 + accountConfig.getSellFeeRate() + profitRate) / (1 - accountConfig.getSellFeeRate());// 利润 profitRate
-																										// 加上成本 开多
-	}
-
-	/**
-	 * @param profitRate %后的结果，由于页面设置使用的是%后的数值，所以这里必须转换成正常的数值
-	 * @return 正常数值，非%后的结果
-	 */
-	private double getPb(float profitRate) {
-		profitRate = profitRate / 100f;
-		return (1 - accountConfig.getBuyFeeRate() - profitRate) / (1 + accountConfig.getBuyFeeRate());// 利润 profitRate
-																										// 加上成本 开空
-	}
-
 	public void processData(HedgingContext hedgingContext, String type, String thisInstrumentId,
 			String nextInstrumentId) {
-		double Ps = getPs(0.1f);// 千分之一的盈利率
-		double Pb = getPb(0.1f);// 千分之一的盈利率
 		float sell_buy_value = 0f;
 		Level2Bean level2Buy = instrumentsDepthService.getBuyFirst(thisInstrumentId);
 		Level2Bean level2Sell = instrumentsDepthService.getSellFirst(nextInstrumentId);
@@ -127,26 +95,15 @@ public class HedgingDataServiceImpl extends BaseDataServiceImpl implements Hedgi
 		}
 		Map<String, Object> map = new HashMap<String, Object>();// 装的是%之后的结果
 		map.put("type", type);
-		map.put("time", System.currentTimeMillis() + "");
+		map.put("time", System.currentTimeMillis()+"");
 		map.put("s_b_v", sell_buy_value * 100f);
 		map.put("b_s_v", buy_sell_value * 100f);
-
-		// 开多 回本价=买入价*(1+手续费率)/(1-手续费率)
-		// 开空 回本价=卖出价*(1-手续费率)/(1+手续费率)
-		// 近卖远买的回本值(Ps-Pb(Pbsv+1))/ Pb(Pbsv+1),Ps=(1+手续费率)/(1-手续费率)，Pb=(1-手续费率)/(1+手续费率)
-		// %
-		double s_b_l = (Ps - (Pb * (buy_sell_value + 1))) / (Pb * (buy_sell_value + 1));
-		map.put("s_b_l", s_b_l * 100f);
-
-		// 近买远卖的回本值 ( Ps-Pb(Psbv+1) )/ Pb(Psbv+1)
-		double b_s_l = (Ps - (Pb * (sell_buy_value + 1))) / (Pb * (sell_buy_value + 1));
-		map.put("b_s_l", b_s_l * 100f);
 		hedgingContext.addHedgingData(map);
 		send(type + "_" + hedgingContext.getCoin(), map);
 	}
 
 	/**
-	 * @param hedgingtype tn_btc,tq_btc,nq_btc.....
+	 * @param hedgingtype 队列名： tn_btc（现周与次周价差）,tq_btc（现周与季度价差）,nq_btc.....（次周与季度价差）  
 	 * @param map
 	 */
 	public void send(String hedgingtype, Map<String, Object> map) {

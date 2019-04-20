@@ -8,9 +8,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.okex.websocket.FutureOrder;
-import com.okex.websocket.WebSocketService;
+import com.xiang.service.WebSocketService;
 
 /**
+ * 交易数据服务类
 * @author xiang
 * @createDate 2018年12月26日 下午3:48:38
 */

@@ -7,8 +7,7 @@ import com.google.common.base.Strings;
 import com.okex.websocket.FutureOrder;
 
 /**
- * 合约库存管理
- * 保存已被占用的合约张数
+ * 接收到的交易数据管理类
  * @author xiang
  * @createDate 2018年12月7日 下午2:56:01
  */

@@ -38,13 +38,6 @@
 		<property name="connectTimeout" value="5000" />
 		<property name="coins" value="${ok_coins}" />
 	</bean>
-	<bean id="msgCenterService"
-		class="com.xiang.service.impl.MsgCenterServiceImpl"></bean>
-	<bean id="webSoketClient"
-		class="com.okex.websocket.WebSoketClient">
-		<property name="service" ref="msgCenterService" />
-		<property name="config" ref="systemConfig" />
-	</bean>
 	<amq:connectionFactory id="amqConnectionFactory"
 		brokerURL="${broker_url}" userName="admin" password="admin" />
 	<bean id="connectionFactory"

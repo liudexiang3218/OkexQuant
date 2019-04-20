@@ -8,25 +8,17 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
 /**
- * 合约库存管理 保存已被占用的合约张数
+ * 套利策略管理
  * 
  * @author xiang
  * @createDate 2018年12月7日 下午2:56:01
  */
 public class HedgingConfigManager {
-	private HedgingConfigManager() {
-	};
+	private HedgingConfigManager() {};
 
 	public static HedgingConfigManager getInstance() {
 		return SingletonHolder.instance;
 	}
-
-	// private Map<String, LinkedList<HedgingConfig>> configsMap = new
-	// ConcurrentHashMap<String, LinkedList<HedgingConfig>>();
-
-	// private String getKey(String coin, String type) {
-	// return type + "_" + coin.toUpperCase();
-	// }
 
 	/**
 	 * @param coin
@@ -49,31 +41,8 @@ public class HedgingConfigManager {
 			}
 		}
 		return result;
-		//
-		// String key = getKey(coin, type);
-		// if (!configsMap.containsKey(key)) {
-		// configsMap.put(key, new LinkedList<HedgingConfig>());
-		// }
-		// return configsMap.get(key);
 	}
 
-//	public void removeHedgingConfig(String configId) {
-//		delete(configId);
-//		Iterator<LinkedList<HedgingConfig>> it = configsMap.values().iterator();
-//		while (it.hasNext()) {
-//			LinkedList<HedgingConfig> configs = it.next();
-//			if (configs != null) {
-//				Iterator<HedgingConfig> listIt = configs.iterator();
-//				while (listIt.hasNext()) {
-//					HedgingConfig config = listIt.next();
-//					if (configId.equals(config.getConfigId())) {
-//						it.remove();
-//						return;
-//					}
-//				}
-//			}
-//		}
-//	}
 
 	public HedgingConfig getHedgingConfig(String configId) {
 
@@ -83,31 +52,9 @@ public class HedgingConfigManager {
 		if (e != null) {
 			return (HedgingConfig) e.getObjectValue();
 		}
-		// Iterator<LinkedList<HedgingConfig>> it = configsMap.values().iterator();
-		// while (it.hasNext()) {
-		// LinkedList<HedgingConfig> configs = it.next();
-		// if (configs != null) {
-		// Iterator<HedgingConfig> listIt = configs.iterator();
-		// while (listIt.hasNext()) {
-		// HedgingConfig config = listIt.next();
-		// if (configId.equals(config.getConfigId()))
-		// return config;
-		// }
-		// }
-		// }
 		return null;
 	}
 
-//	public void addHedgingConfig(HedgingConfig config) {
-//		// TODO Auto-generated method stub
-//		LinkedList<HedgingConfig> configs = getConfigs(config.getCoin(), config.getType());
-//		if (configs == null) {
-//			configs = new LinkedList<HedgingConfig>();
-//			String key = getKey(config.getCoin(), config.getType());
-//			configsMap.put(key, configs);
-//		}
-//		configs.add(config);
-//	}
 
 	public void save(HedgingConfig config) {
 		update(config);

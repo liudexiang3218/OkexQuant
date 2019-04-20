@@ -22,7 +22,6 @@ public class HedgingManager {
 		hedgings=list;
 	}
 	public List<Hedging> getHedgings() {
-		// TODO Auto-generated method stub
 		return hedgings;
 	}
 

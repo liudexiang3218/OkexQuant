@@ -2,10 +2,12 @@ package com.okex.websocket;
 
 import java.io.Serializable;
 
+/**
+ * 期货交易订单
+ * @author xiang
+ *
+ */
 public class FutureOrder implements Serializable{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private String instrumentId;// 	String 	合约ID，如BTC-USDT-180213
 	private int size;// 	String 	数量

@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 			User user = new User();
 			user.setUserName("admin");
 			user.setPassword("21232f297a57a5a743894a0e4a801fc3");
-			user.setPermission("user");
+			user.setPermission("admin");
 			user.setRole("admin");
 			return user;
 		} else if ("test".equals(userName)) {

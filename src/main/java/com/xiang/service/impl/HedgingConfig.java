@@ -3,6 +3,11 @@ package com.xiang.service.impl;
 import java.io.Serializable;
 import java.util.UUID;
 
+/**
+ * 合约交易策略配置
+ * @author Administrator
+ *
+ */
 public class HedgingConfig implements Serializable {
 	/**
 	 * 

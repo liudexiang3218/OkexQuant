@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.okex.websocket.WebSocketService;
-import com.okex.websocket.WebSoketClient;
 import com.xiang.service.DepthService;
 import com.xiang.service.InstrumentsDepthService;
+import com.xiang.service.WebSocketService;
 
 /**
+ * 全量200档深度数据，目前暂无使用
  * @author xiang
  * @createDate 2018年12月26日 下午2:17:28
  */

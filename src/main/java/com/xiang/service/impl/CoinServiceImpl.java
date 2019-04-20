@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 @Service("coinService")
 public class CoinServiceImpl {
 
+	/**
+	 * 获取虚拟币单张合约美元价值
+	 * @param coin
+	 * @return
+	 */
 	public int getUnitAmount(String coin)
 	{
 		if ("btc".equals(coin.toLowerCase()))
@@ -16,10 +21,10 @@ public class CoinServiceImpl {
 		return 10;
 	}
 	/**
-	 * @param coin
-	 * @param price
-	 * @param leverRate
-	 * @param amount
+	 * @param coin 虚拟币
+	 * @param price 价格
+	 * @param leverRate 杠杆
+	 * @param amount 合约张数
 	 * @return 计算需要占用的保证金
 	 */
 	public double getMargin(String coin, float price, int leverRate,int amount)

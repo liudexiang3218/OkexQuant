@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
+ * 套利价差数据存储
  * @author xiang
  * @createDate 2018年12月10日 下午2:41:31
  */

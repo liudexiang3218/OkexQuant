@@ -32,6 +32,7 @@ import com.okex.websocket.FutureOrder;
 import com.xiang.service.TradeApiService;
 
 /**
+ * 期货交易okex api服务
  * @author xiang
  * @createDate 2018年12月28日 上午9:55:36
  */
@@ -76,6 +77,9 @@ public class TradeApiServiceImpl implements TradeApiService{
 			}
 		}
 	}
+	/* 
+	 * 撤销提交的交易
+	 */
 	@Async
 	@Override
 	@Retryable(value = { TimeoutException.class }, maxAttempts = 3, backoff = @Backoff(delay = 100l)) // timeout异常使用重试机制
@@ -87,6 +91,9 @@ public class TradeApiServiceImpl implements TradeApiService{
 					Long.parseLong(trade.getFutureOrder().getOrderId()));
 		}
 	}
+	/* 
+	 * 批量撤销提交的交易
+	 */
 	@Async
 	@Override
 	@Retryable(value = { TimeoutException.class }, maxAttempts = 3, backoff = @Backoff(delay = 100l)) // timeout异常使用重试机制
@@ -104,7 +111,9 @@ public class TradeApiServiceImpl implements TradeApiService{
 			JSONObject result = futurePostV3.cancelOrders(instrumentId, cancelOrders);
 		}
 	}
-
+	/* 
+	 * 提交交易
+	 */
 	@Async
 	@Override
 	@Retryable(value = { TimeoutException.class }, maxAttempts = 3, backoff = @Backoff(delay = 100l)) // timeout异常使用重试机制
@@ -138,6 +147,9 @@ public class TradeApiServiceImpl implements TradeApiService{
 			trade.setStatus(3);
 		}
 	}
+	/* 
+	 * 批量提交交易
+	 */
 	@Async
 	@Override
 	@Retryable(value = { TimeoutException.class }, maxAttempts = 3, backoff = @Backoff(delay = 50l)) // timeout异常使用重试机制

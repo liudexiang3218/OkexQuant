@@ -11,6 +11,11 @@ import com.xiang.service.Instrument;
 import com.xiang.service.InstrumentService;
 import com.xiang.service.SpotInstrumentService;
 
+/**
+ * 获取现货和期货合约ID服务类
+ * @author Administrator
+ *
+ */
 @Service("instrumentService")
 public class InstrumentServiceImpl implements InstrumentService {
 	@Autowired

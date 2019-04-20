@@ -5,10 +5,10 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.okex.websocket.WebSocketService;
-import com.okex.websocket.WebSoketClient;
+import com.xiang.service.WebSocketService;
 
 /**
+ * 接受ws推送的登录消息处理
  * @author xiang
  * @createDate 2018年12月26日 下午4:26:14
  */

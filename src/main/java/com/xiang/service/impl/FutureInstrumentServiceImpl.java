@@ -13,7 +13,6 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -23,14 +22,10 @@ import com.okcoin.commons.okex.open.api.bean.futures.result.Instruments;
 import com.okcoin.commons.okex.open.api.service.futures.FuturesMarketAPIService;
 import com.okcoin.commons.okex.open.api.service.futures.impl.FuturesMarketAPIServiceImpl;
 import com.okex.websocket.FutureInstrument;
-import com.okex.websocket.WebSoketClient;
 import com.xiang.service.FutureInstrumentService;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-
 /**
+ * 虚拟币合约ID列表
  * @author xiang
  * @createDate 2018年12月27日 上午10:01:22
  */

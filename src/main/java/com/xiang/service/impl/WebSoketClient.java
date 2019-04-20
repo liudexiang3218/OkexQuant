@@ -1,4 +1,4 @@
-package com.okex.websocket;
+package com.xiang.service.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -12,9 +12,26 @@ import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+
 import com.alibaba.fastjson.JSONArray;
+import com.google.common.base.Strings;
 import com.okcoin.commons.okex.open.api.utils.HmacSHA256Base64Utils;
-import com.xiang.service.impl.SystemConfig;
+import com.okex.websocket.MoniterTask;
+import com.okex.websocket.WebSocketBase;
+import com.okex.websocket.WebSocketClientHandler;
+import com.xiang.service.FutureInstrumentService;
+import com.xiang.service.WebSocketService;
+import com.xiang.spring.SpringContextHolder;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -34,14 +51,79 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketClientHandshakerFactory;
 import io.netty.handler.codec.http.websocketx.WebSocketVersion;
 import io.netty.handler.ssl.SslContext;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
 
 /**
+ * 项目 主入口，okex v3 订阅数据客户端，初始化开启
  * @author xiang
  * @createDate 2018年12月24日 下午3:34:19
  */
-public class WebSocketBaseV3 implements WebSocketBase {
+@Service("webSoketClient")
+public class WebSoketClient implements WebSocketBase, ApplicationListener<ContextRefreshedEvent> {
+	@Resource(name="msgCenterService")
+	private WebSocketService msgCenterService;
+	/**
+	 * 参数配置
+	 */
+	@Autowired
+	private SystemConfig systemConfig;
+	/**
+	 * 期货合约ID服务
+	 */
+	@Autowired
+	private FutureInstrumentService futureInstrumentService;
+	@PostConstruct
+	private void init() {
+		start();
+	}
 
-	private WebSocketService service = null;
+	@PreDestroy
+	public void destroy() {
+		if (HedgingManager.getInstance().getHedgings().size() > 0) {
+			EhCacheCacheManager cacheCacheManager = SpringContextHolder.applicationContext
+					.getBean(EhCacheCacheManager.class);
+			Cache cache = cacheCacheManager.getCacheManager().getCache("hedgingsCache");
+			cache.put(new Element("hedgings", HedgingManager.getInstance().getHedgings()));
+			cache.flush();
+		}
+		stop();
+	}
+	
+	@Override
+	public void onApplicationEvent(ContextRefreshedEvent event) {
+		if (event.getApplicationContext().getParent() == null) {
+			System.out.println("init subscribe okex ws V3");
+			futureInstrumentService.refresh();
+			List<String> subscribes = futureInstrumentService.getSubscribes();
+			if (subscribes == null) {
+				subscribes = new LinkedList<String>();
+			}
+			String[] coins = null;
+			if (!Strings.isNullOrEmpty(systemConfig.getCoins())) {
+				coins = systemConfig.getCoins().split(",");
+			}
+			if (coins != null)
+				for (String coin : coins) {
+					subscribes.add("futures/account:" + coin.toUpperCase());
+				}
+			addChannel("subscribe", subscribes);
+			EhCacheCacheManager cacheCacheManager = SpringContextHolder.applicationContext
+					.getBean(EhCacheCacheManager.class);
+			Cache cache = cacheCacheManager.getCacheManager().getCache("hedgingsCache");
+			Element element = cache.get("hedgings");
+			if (element != null) {
+				List<Hedging> hedgings = (List<Hedging>) element.getObjectValue();
+				if (!ObjectUtils.isEmpty(hedgings)) {
+					HedgingManager.getInstance().initHedgings(hedgings);
+					VolumeManager.getInstance().init(hedgings);
+				}
+			}
+		}
+	}
+	
+	
+	
 	private Timer timerTask = null;
 	private MoniterTask moniter = null;
 	private EventLoopGroup group = null;
@@ -50,24 +132,8 @@ public class WebSocketBaseV3 implements WebSocketBase {
 	private ChannelFuture future = null;
 	private boolean isAlive = false;
 	private Set<String> subscribChannel = new HashSet<String>();
-	private SystemConfig config;
+	
 	private boolean isLogin = false;
-
-	public WebSocketService getService() {
-		return service;
-	}
-
-	public void setService(WebSocketService service) {
-		this.service = service;
-	}
-
-	public SystemConfig getConfig() {
-		return config;
-	}
-
-	public void setConfig(SystemConfig config) {
-		this.config = config;
-	}
 
 	public boolean isLogin() {
 		return isLogin;
@@ -85,10 +151,10 @@ public class WebSocketBaseV3 implements WebSocketBase {
 	}
 
 	public void start() {
-		if (config.getOkWebSocketURL() == null) {
+		if (systemConfig.getOkWebSocketURL() == null) {
 			return;
 		}
-		if (service == null) {
+		if (msgCenterService == null) {
 			return;
 		}
 		moniter = new MoniterTask(this);
@@ -224,13 +290,13 @@ public class WebSocketBaseV3 implements WebSocketBase {
 	private void connect() {
 		try {
 			setLogin(false);
-			final URI uri = new URI(config.getOkWebSocketURL());
+			final URI uri = new URI(systemConfig.getOkWebSocketURL());
 			group = new NioEventLoopGroup(1);
 			bootstrap = new Bootstrap();
 			final SslContext sslCtx = SslContext.newClientContext();
 			final WebSocketClientHandler handler = new WebSocketClientHandler(WebSocketClientHandshakerFactory
 					.newHandshaker(uri, WebSocketVersion.V13, null, false, new DefaultHttpHeaders(), Integer.MAX_VALUE),
-					service, moniter);
+					msgCenterService, moniter);
 			bootstrap.group(group).option(ChannelOption.TCP_NODELAY, true).channel(NioSocketChannel.class)
 					.handler(new ChannelInitializer<SocketChannel>() {
 						protected void initChannel(SocketChannel ch) {
@@ -248,7 +314,7 @@ public class WebSocketBaseV3 implements WebSocketBase {
 				public void operationComplete(final ChannelFuture future) throws Exception {
 					setStatus(true);
 					reAddChannel();
-					loginV3(config.getApiKey(), config.getSecretKey(), config.getPassphrase());
+					loginV3(systemConfig.getApiKey(), systemConfig.getSecretKey(), systemConfig.getPassphrase());
 				}
 			});
 		} catch (Exception e) {

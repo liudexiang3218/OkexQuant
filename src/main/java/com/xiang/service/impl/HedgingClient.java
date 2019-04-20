@@ -11,6 +11,7 @@ import com.xiang.service.TradeApiService;
 import com.xiang.spring.SpringContextHolder;
 
 /**
+ * 发起合约交易类
  * @author xiang
  * @createDate 2018年12月28日 上午8:59:25
  */

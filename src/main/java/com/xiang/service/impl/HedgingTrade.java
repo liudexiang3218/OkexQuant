@@ -6,6 +6,11 @@ import java.util.UUID;
 import com.google.common.base.Strings;
 import com.okex.websocket.FutureOrder;
 
+/**
+ * 每笔提交交易类
+ * @author xiang
+ *
+ */
 public class HedgingTrade implements Serializable{
 	/**
 	 * 
@@ -90,20 +95,6 @@ public class HedgingTrade implements Serializable{
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public String getReverseType() {
-		if (type == null)
-			return null;
-		if (type.equals("1"))
-			return "3";
-		if (type.equals("2"))
-			return "4";
-		if (type.equals("3"))
-			return "1";
-		if (type.equals("4"))
-			return "2";
-		return null;
 	}
 
 	public int getStatus() {

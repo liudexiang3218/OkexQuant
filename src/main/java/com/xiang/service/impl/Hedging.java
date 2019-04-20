@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.mysql.jdbc.StringUtils;
 
 /**
+ * 套利交易存储对象
  * @author Administrator
  *
  */

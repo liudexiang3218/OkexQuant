@@ -1,5 +1,10 @@
 package com.okex.websocket;
 
+/**
+ * 账户权益
+ * @author xiang
+ *
+ */
 public class FutureAccount {
 	private String currency;//币种，如：btc
 	private String marginMode;// 	账户类型：全仓 crossed

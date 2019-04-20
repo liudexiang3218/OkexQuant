@@ -2,6 +2,11 @@ package com.okex.websocket;
 
 import java.util.TimerTask;
 
+/**
+ * ws定时监控连线
+ * @author xiang
+ *
+ */
 public class MoniterTask extends TimerTask{
 
 	private long startTime = System.currentTimeMillis();

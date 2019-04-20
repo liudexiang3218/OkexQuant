@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.okex.websocket.OkexConstant;
-import com.okex.websocket.WebSocketService;
 import com.xiang.service.DepthService;
 import com.xiang.service.InstrumentsDepthService;
+import com.xiang.service.WebSocketService;
 
 /**
+ * 5档委托深度数据
  * @author xiang
  * @createDate 2018年12月26日 下午2:17:28
  */
@@ -51,15 +52,26 @@ public class InstrumentsDepth5ServiceImpl implements WebSocketService, Instrumen
 		}
 	}
 
+	/**
+	 * 获取当前合约ID的第几档卖价深度委托数据
+	 * @param instrumentId
+	 * @param pos
+	 * @return
+	 */
 	@Override
 	public Level2Bean getSellLevel2Postion(String instrumentId, int pos) {
-		// TODO Auto-generated method stub
 		DepthService depthService = depthServices.get(instrumentId);
 		if (depthService != null)
 			return depthService.getSellLevel2Postion(pos);
 		return null;
 	}
 
+	/**
+	 * 获取当前合约ID的第几档买价深度委托数据
+	 * @param instrumentId
+	 * @param pos
+	 * @return
+	 */
 	@Override
 	public Level2Bean getBuyLevel2Postion(String instrumentId, int pos) {
 		DepthService depthService = depthServices.get(instrumentId);
@@ -68,6 +80,11 @@ public class InstrumentsDepth5ServiceImpl implements WebSocketService, Instrumen
 		return null;
 	}
 
+	/**
+	 * 卖一价
+	 * @param instrumentId
+	 * @return
+	 */
 	@Override
 	public Level2Bean getSellFirst(String instrumentId) {
 		DepthService depthService = depthServices.get(instrumentId);
@@ -76,6 +93,11 @@ public class InstrumentsDepth5ServiceImpl implements WebSocketService, Instrumen
 		return null;
 	}
 
+	/**
+	 * 买一价
+	 * @param instrumentId
+	 * @return
+	 */
 	@Override
 	public Level2Bean getBuyFirst(String instrumentId) {
 		DepthService depthService = depthServices.get(instrumentId);

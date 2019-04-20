@@ -23,10 +23,11 @@ import com.google.common.base.Strings;
 import com.okcoin.commons.okex.open.api.service.futures.FuturesTradeAPIService;
 import com.okcoin.commons.okex.open.api.service.futures.impl.FuturesTradeAPIServiceImpl;
 import com.okex.websocket.FutureAccount;
-import com.okex.websocket.WebSocketService;
 import com.xiang.service.FutureAccountService;
+import com.xiang.service.WebSocketService;
 
 /**
+ * 合约的账户权益
  * @author xiang
  * @createDate 2018年12月26日 下午4:26:14
  */
@@ -43,7 +44,7 @@ public class FutureAccountServiceImpl implements WebSocketService, FutureAccount
 	private Map<String, FutureAccount> accounts = new ConcurrentHashMap<>();
 
 	@PostConstruct
-	public void init() { 
+	public void init() {
 		futurePostV3 = new FuturesTradeAPIServiceImpl(systemConfig);
 		if (!Strings.isNullOrEmpty(systemConfig.getCoins())) {
 			coins = systemConfig.getCoins().split(",");

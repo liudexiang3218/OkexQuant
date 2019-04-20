@@ -10,6 +10,7 @@ import java.util.concurrent.TimeoutException;
 import com.xiang.service.TradeApiService;
 
 /**
+ * 每笔交易代理类，集中处理一次性提交所有的交易
  * @author xiang
  * @createDate 2018年12月28日 上午8:59:25
  */

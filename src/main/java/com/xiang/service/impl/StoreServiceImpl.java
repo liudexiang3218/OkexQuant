@@ -7,8 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
-import com.okex.websocket.WebSocketBaseV3;
-import com.okex.websocket.WebSocketService;
+import com.xiang.service.WebSocketService;
 
 /**
 * @author xiang

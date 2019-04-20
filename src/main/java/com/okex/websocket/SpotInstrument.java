@@ -3,6 +3,11 @@ package com.okex.websocket;
 import com.okcoin.commons.okex.open.api.bean.spot.result.Product;
 import com.xiang.service.Instrument;
 
+/**
+ * 现货合约ID
+ * @author xiang
+ *
+ */
 public class SpotInstrument extends Product implements Instrument {
 	private String contractType;
 

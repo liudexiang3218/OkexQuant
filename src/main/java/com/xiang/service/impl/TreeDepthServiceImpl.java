@@ -15,7 +15,7 @@ import com.okex.websocket.OkexConstant;
 import com.xiang.service.DepthService;
 
 /**
- * 使用二叉树实现委托数据排序
+ * 使用二叉树实现委托数据排序(目前开启的是使用5档深度数据，假如需要开启200档深度数据可以使用这个进行接收)
  * 
  * @author xiang
  *

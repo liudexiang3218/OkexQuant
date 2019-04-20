@@ -20,6 +20,7 @@ import com.okex.websocket.SpotInstrument;
 import com.xiang.service.SpotInstrumentService;
 
 /**
+ * 现货合约ID服务
  * @author xiang
  * @createDate 2018年12月27日 上午10:01:22
  */

@@ -19,6 +19,7 @@ import com.xiang.service.InstrumentsDepthService;
 import com.xiang.service.TradeApiService;
 
 /**
+ * 套利交易平仓
  * @author xiang
  * @createDate 2018年12月27日 上午9:46:53
  */

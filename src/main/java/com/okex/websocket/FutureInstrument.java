@@ -4,6 +4,7 @@ import com.okcoin.commons.okex.open.api.bean.futures.result.Instruments;
 import com.xiang.service.Instrument;
 
 /**
+ * 期货合约ID
 * @author xiang
 * @createDate 2018年12月27日 上午11:30:41
 */
