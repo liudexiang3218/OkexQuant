@@ -60,4 +60,5 @@ If you find Element useful, you can buy us a cup of coffee
 
 <img width="650" src="https://github.com/liudexiang3218/OkexQuant/blob/master/ScreenShots/qrcode.png?raw=true" alt="donation">
 
-#### 互助微信群
+#### 作者微信
+<img src="https://github.com/liudexiang3218/OkexQuant/blob/master/ScreenShots/wechatqr.png?raw=true">
