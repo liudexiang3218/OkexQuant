@@ -23,7 +23,7 @@
 2. 导入eclipse
 3. 修改配置文件system.properties
 4. jetty:run项目 
-5. http://127.0.0.1:8088
+5. http://127.0.0.1:8088/index.jsp
 
 #### 使用说明
 
