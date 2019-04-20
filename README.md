@@ -8,6 +8,10 @@
 3. 实时的合约行情
 4. 不同用户的权限控制
 
+#### 项目github
+1. [OkexQuant 后端服务](https://github.com/liudexiang3218/OkexQuant)
+1. [OkexQuant_vue 前端界面项目](https://github.com/liudexiang3218/OkexQuant_vue)
+
 #### 软件架构
 <img src="https://github.com/liudexiang3218/OkexQuant/blob/master/ScreenShots/flow.png?raw=true">
 
@@ -26,6 +30,16 @@
 2. 根据条件设置策略
 3. 开启策略开始按钮
 
+#### system.properties配置说明
+
+1.  ``broker_url ``:activemq连接url
+2.  ``ok_websocket_url ``: okex ws连接url
+3.  ``ok_rest_url ``: okex api服务器连接
+3.  ``ok_api_key ``: 您的okex开发平台上申请的api key
+4.  ``ok_secret_key ``: 您的okex开发平台上申请的secret key
+5.  ``ok_passphrase ``: 您的okex开发平台上申请的passphrase
+6.  ``ok_coins ``: 配置项目支持的数字货币（例如：btc,ltc,eth,etc,btg,xrp,eos）
+
 #### 开发环境
 
 1. eclipse-2018-12
@@ -34,8 +48,16 @@
 4. jetty
 5. activeMQ 5.15.9
 
+#### 技术栈
+1. springmvc 4.3.19
+2. activemq 5.15.4
+3. ehcache 2.10.6
+4. java-jwt 3.4.1
+5. shiro 1.4.0
 
 #### Donation
 If you find Element useful, you can buy us a cup of coffee
 
 <img width="650" src="https://github.com/liudexiang3218/OkexQuant/blob/master/ScreenShots/qrcode.png?raw=true" alt="donation">
+
+#### 互助微信群

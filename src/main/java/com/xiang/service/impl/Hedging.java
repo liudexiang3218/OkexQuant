@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.UUID;
 
-import com.mysql.jdbc.StringUtils;
-
 /**
  * 套利交易存储对象
  * @author Administrator
@@ -102,18 +100,11 @@ public class Hedging implements Serializable{
 	 * 显示标题
 	 */
 	public String getTitle() {
-		if (!StringUtils.isNullOrEmpty(title))
+		if (!org.apache.commons.lang3.StringUtils.isEmpty(title))
 			return title;
 		if (this.hedgingConfig != null) {
 			StringBuffer buffer = new StringBuffer();
 			buffer.append(this.hedgingConfig.getTitle());
-//			if (buyTrade != null && sellTrade != null) {
-//				if ("next_week".equals(buyTrade.getContractType()) && "this_week".equals(sellTrade.getContractType())) {
-//					buffer.append("-近卖远买");
-//				} else if ("this_week".equals(buyTrade.getContractType()) && "next_week".equals(sellTrade.getContractType())) {
-//					buffer.append("-近买远卖");
-//				}
-//			}
 			title = buffer.toString();
 			return title;
 		}
