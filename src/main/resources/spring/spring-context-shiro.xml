@@ -51,6 +51,7 @@
 		<property name="securityManager" ref="securityManager" />
 		<property name="filterChainDefinitions">
 			<value>
+			    /index.jsp = anon
 				/static/** = anon
 				/resources/** = anon
 				/user/login = anon
