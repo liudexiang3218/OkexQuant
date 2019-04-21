@@ -3,6 +3,9 @@ package com.xiang.user.service.impl;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
+
+import javax.annotation.Resource;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.BeanUtils;
@@ -21,22 +24,17 @@ import com.xiang.vo.UserVo;
  */
 @Service("userService")
 public class UserServiceImpl implements UserService {
-
+	@Resource
+	Properties users;
 	public User getQueryUser(String userName) {
 		// 实现自己的用户逻辑
-		if ("admin".equals(userName)) {
+		if (users.containsKey(userName)) {
 			User user = new User();
-			user.setUserName("admin");
-			user.setPassword("21232f297a57a5a743894a0e4a801fc3");
+			user.setUserName(userName);
+			String plainPwd=users.getProperty(userName);
+			user.setPassword(DigestUtils.md5Hex(plainPwd));
 			user.setPermission("admin");
 			user.setRole("admin");
-			return user;
-		} else if ("test".equals(userName)) {
-			User user = new User();
-			user.setUserName("test");
-			user.setPassword("21232f297a57a5a743894a0e4a801fc3");
-			user.setPermission("user");
-			user.setRole("user");
 			return user;
 		}
 		throw new APIException(ErrorCodes.AUTH);

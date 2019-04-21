@@ -70,6 +70,16 @@
 				</list>
 			</property>
 		</bean>
+		
+		<bean id="users" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+   <property name="locations">
+       <array>
+          <value>classpath:development/user.properties</value>
+       </array>
+   </property>
+           <property name="fileEncoding" value="UTF-8"></property>
+</bean>
+		
 	</beans>
 	<beans profile="production">
 			<bean
@@ -82,5 +92,15 @@
 				</list>
 			</property>
 		</bean>
+		
+			<bean id="users" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+   <property name="locations">
+       <array>
+          <value>classpath:production/user.properties</value>
+       </array>
+   </property>
+           <property name="fileEncoding" value="UTF-8"></property>
+</bean>
+
 	</beans>
 </beans>
