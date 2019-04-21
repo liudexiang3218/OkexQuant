@@ -23,7 +23,7 @@ import com.xiang.spring.ErrorCodes;
  * @createDate 2018年12月13日 上午9:38:01
  */
 public class JWTAuth {
-	private static final String SECRET = "<MQLMNQNQJQK sdfXX#$%()(#*!()!KL<>kjsdrow38854545fdf>?N<:{LWPW";
+	private static  String JWTSECRET = "MQLMNQNQJQKwwftsdfXX#$%()(#*!()!KL<>kjsdrow38854545fdf>?N<:{LWPW";
 	private static final String ISSUER = "com.auth0";
 	public static final String USERNAME="username";
 	public static final String TOKENHEADER="xauthtoken";
@@ -36,6 +36,9 @@ public class JWTAuth {
 	 */
 	public static long DEFAULT_REFRESH_TOKEN = 1;
 
+	public void setSecret(String secret) {
+		JWTAuth.JWTSECRET=secret;
+	}
 	/**
 	 * 生成token
 	 *
@@ -44,7 +47,7 @@ public class JWTAuth {
 	 */
 	public static String createToken(Map<String, String> claims) throws APIException {
 		try {
-			Algorithm algorithm = Algorithm.HMAC256(SECRET);
+			Algorithm algorithm = Algorithm.HMAC256(JWTSECRET);
 			JWTCreator.Builder builder = JWT.create().withIssuer(ISSUER)
 					.withExpiresAt(DateUtils.addDays(new Date(), DEFAULT_EXPIRE_DAY));
 			claims.forEach(builder::withClaim);
@@ -75,7 +78,7 @@ public class JWTAuth {
 		Algorithm algorithm;
 		Map<String, Claim> map;
 		try {
-			algorithm = Algorithm.HMAC256(SECRET);
+			algorithm = Algorithm.HMAC256(JWTSECRET);
 			JWTVerifier verifier = JWT.require(algorithm).withIssuer(ISSUER).build();
 			DecodedJWT jwt = verifier.verify(token);
 			map = jwt.getClaims();

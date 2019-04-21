@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
 		UserVo vo = new UserVo();
 		BeanUtils.copyProperties(user, vo);
 		Map<String, String> claims = new HashMap<String, String>();
-		claims.put("userName", vo.getUserName());
+		claims.put(JWTAuth.USERNAME, vo.getUserName());
 		vo.setToken(JWTAuth.createToken(claims));
 		return vo;
 	}

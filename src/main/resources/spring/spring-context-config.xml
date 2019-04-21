@@ -59,16 +59,28 @@
 		<property name="deliveryMode" value="1" />
 	</bean>
 	<!-- 开发生产环境配置 -->
-	<beans profile="test">
-		<context:property-placeholder
-			location="classpath:test/system.properties" />
-	</beans>
 	<beans profile="development">
-		<context:property-placeholder
-			location="classpath:development/system.properties" />
+			<bean
+			class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+			<property name="order" value="1" />
+			<property name="ignoreUnresolvablePlaceholders" value="true" />
+				<property name="locations">
+				<list>
+					<value>classpath:development/system.properties</value>
+				</list>
+			</property>
+		</bean>
 	</beans>
 	<beans profile="production">
-		<context:property-placeholder
-			location="classpath:production/system.properties" />
+			<bean
+			class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+			<property name="order" value="1" />
+			<property name="ignoreUnresolvablePlaceholders" value="true" />
+				<property name="locations">
+				<list>
+					<value>classpath:production/system.properties</value>
+				</list>
+			</property>
+		</bean>
 	</beans>
 </beans>

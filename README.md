@@ -9,8 +9,9 @@
 4. 不同用户的权限控制
 
 #### 项目github
-1. [OkexQuant 后端服务](https://github.com/liudexiang3218/OkexQuant)
-1. [OkexQuant_vue 前端界面项目](https://github.com/liudexiang3218/OkexQuant_vue)
+1. 系统总共包括2个项目
+2. [OkexQuant 后端服务 api](https://github.com/liudexiang3218/OkexQuant)
+3. [OkexQuant_vue 前端界面项目](https://github.com/liudexiang3218/OkexQuant_vue)
 
 #### 软件架构
 <img src="https://github.com/liudexiang3218/OkexQuant/blob/master/ScreenShots/flow.png?raw=true">
@@ -18,7 +19,7 @@
 
 #### 安装教程
 
-1. 安装activeMQ 5的版本
+1. 安装activeMQ 5的版本,到activeMQ bin目录，执行 activemq start
 1. 下载项目 git clone https://github.com/liudexiang3218/OkexQuant.git
 2. 导入eclipse
 3. 修改配置文件system.properties

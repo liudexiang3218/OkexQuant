@@ -33,6 +33,7 @@ public class JwtAuthFilter extends AuthenticatingFilter {
 		}
 		return super.onPreHandle(request, response, mappedValue);
 	}
+
 	@Override
 	protected AuthenticationToken createToken(String username, String password, ServletRequest request,
 			ServletResponse response) {
@@ -44,6 +45,7 @@ public class JwtAuthFilter extends AuthenticatingFilter {
 		}
 		return null;
 	}
+
 	@Override
 	protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
 		Subject subject = SecurityUtils.getSubject();
@@ -54,6 +56,7 @@ public class JwtAuthFilter extends AuthenticatingFilter {
 		}
 		return super.isAccessAllowed(request, response, mappedValue);
 	}
+
 	@Override
 	protected void postHandle(ServletRequest request, ServletResponse response) throws Exception {
 		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
@@ -73,6 +76,7 @@ public class JwtAuthFilter extends AuthenticatingFilter {
 		}
 		super.postHandle(request, response);
 	}
+
 	@Override
 	protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
