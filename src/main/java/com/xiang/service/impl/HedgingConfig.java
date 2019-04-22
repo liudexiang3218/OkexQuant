@@ -41,13 +41,6 @@ public class HedgingConfig implements Serializable {
 	 * type in (tt,tn,tq,nq)
 	 */
 	private String type;
-
-	/**
-	 * 是否使用自动阈值模式，如果使用自动模式将忽略sellBuyThresholdRate，buySellThresholdRate
-	 */
-	private boolean autoSellBuyThresholdRate;
-	private boolean autoBuySellThresholdRate;
-
 	/**
 	 * 近期开空远期开多阈值，当近期买一价减去远期卖一价%超过这个阈值，进行对冲套利
 	 */
@@ -96,8 +89,8 @@ public class HedgingConfig implements Serializable {
 	 */
 	private int maxHedgingHour = 0;
 
-	private int buyLevel = 2;// 由于使用买一价来判断和购买是否可以对冲，经常容易导致只成交了一方，而对手方无法成功成交到，所以可以使用其他买几价来减低这个概率。使用买几价来匹配，买一价，买二价，买三价，依此类推。
-	private int sellLevel = 2;// 由于使用卖一价来判断和购买是否可以对冲，经常容易导致只成交了一方，而对手方无法成功成交到，所以可以使用其他卖几价来减低这个概率。使用卖几价来匹配，卖一价，卖二价，卖三价，依此类推。
+	private int buyLevel = 2;// 使用买几价来匹配，买一价，买二价，买三价，依此类推。
+	private int sellLevel = 2;// 使用卖几价来匹配，卖一价，卖二价，卖三价，依此类推。
 	/**
 	 * 是否开始对冲套利
 	 */
@@ -214,22 +207,6 @@ public class HedgingConfig implements Serializable {
 
 	public void setLastHegingHour(int lastHegingHour) {
 		this.lastHegingHour = lastHegingHour;
-	}
-
-	public boolean isAutoSellBuyThresholdRate() {
-		return autoSellBuyThresholdRate;
-	}
-
-	public void setAutoSellBuyThresholdRate(boolean autoSellBuyThresholdRate) {
-		this.autoSellBuyThresholdRate = autoSellBuyThresholdRate;
-	}
-
-	public boolean isAutoBuySellThresholdRate() {
-		return autoBuySellThresholdRate;
-	}
-
-	public void setAutoBuySellThresholdRate(boolean autoBuySellThresholdRate) {
-		this.autoBuySellThresholdRate = autoBuySellThresholdRate;
 	}
 
 	public String getCoin() {
