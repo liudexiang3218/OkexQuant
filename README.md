@@ -41,6 +41,10 @@
 4.  ``ok_secret_key ``: 您的okex开发平台上申请的secret key
 5.  ``ok_passphrase ``: 您的okex开发平台上申请的passphrase
 6.  ``ok_coins ``: 配置项目支持的数字货币（例如：btc,ltc,eth,etc,btg,xrp,eos）
+6.  ``jwt_secret ``: JWT权限加密密钥
+
+#### user.properties系统用户配置
+1. user=password 账号=密码
 
 #### 开发环境
 
