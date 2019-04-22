@@ -20,11 +20,11 @@
 #### 安装教程
 
 1. 安装activeMQ 5的版本,到activeMQ bin目录，执行 activemq start
-1. 下载项目 git clone https://github.com/liudexiang3218/OkexQuant.git
-2. 导入eclipse
-3. 修改配置文件system.properties
-4. jetty:run项目 
-5. http://127.0.0.1:8088/index.jsp
+2. 下载项目 git clone https://github.com/liudexiang3218/OkexQuant.git
+3. 导入eclipse
+4. 修改配置文件system.properties
+5. jetty:run项目 
+6. http://127.0.0.1:8088/index.jsp
 
 #### 使用说明
 
